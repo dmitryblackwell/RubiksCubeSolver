@@ -1,38 +1,32 @@
 package com.blackwell;
 
 public class Facelet {
-    private char[] face;
+    public static final int FACE_LENGTH = 9;
+    private char[] face = new char[FACE_LENGTH];
 
-
-    /*
-    0 1 2
-    3 4 5
-    6 7 8
-     */
-    public Facelet(char[] f) {
-        face = new char[9];
+    Facelet(char[] f) {
         System.arraycopy(f,0,face,0,9);
     }
-    public Facelet(Facelet f){
-        face = new char[9];
-        System.arraycopy(f.face,0,face,0,9);
+    Facelet(Facelet f){
+        this(f.face);
     }
-    public void setSide(int[] s, char[] sc){
-        //if (side.length != 3)
-            // throw something bad
-        for(int i=0; i<s.length; ++i)
-            face[s[i]] = sc[i];
-    }
-    public char[] getSide(int[] s){
-        //if (side.length != 3)
-            // throw something bad
-        char[] side=new char[s.length];
-        for (int i=0; i<s.length; ++i)
-            side[i] = face[s[i]];
 
-        return side;
+    public char get(int i){
+        return face[i];
     }
-    public boolean isComplite(){
+    public char[] get(int i1,int i2,int i3){
+        return new char[]{face[i1], face[i2], face[i3]};
+    }
+    public void set(int i,char c){
+        face[i] = c;
+    }
+    public void set(int i1,int i2,int i3, char[] ch){
+        face[i1] = ch[0];
+        face[i2] = ch[1];
+        face[i3] = ch[2];
+    }
+
+    boolean isComplete(){
         char ch = face[0];
         for (int i=1; i<9; ++i)
             if (face[i] != ch)
@@ -40,16 +34,17 @@ public class Facelet {
         return true;
     }
     public String toString(){
-        String s = "";
+        StringBuilder builder = new StringBuilder();
         for(int i=1; i<=9; ++i){
-            s+=face[i-1];
+            builder.append(face[i-1]);
             if(i%3 == 0)
-                s+="\n";
+                builder.append("\n");
         }
-        s += "\n";
-        return s;
+        builder.append("\n");
+        return builder.toString();
     }
-    public void rotate(){
+
+    void rotate(){
         char cornerTmp=face[0];
         face[0] = face[6];
         face[6] = face[8];
