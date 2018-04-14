@@ -1,4 +1,4 @@
-package com.blackwell.partsolution;
+package com.blackwell.cube;
 
 
 public enum Side{

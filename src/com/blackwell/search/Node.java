@@ -1,4 +1,7 @@
-package com.blackwell.partsolution;
+package com.blackwell.search;
+
+import com.blackwell.cube.CubeCorners;
+import com.blackwell.cube.Side;
 
 public class Node {
     int s;
