@@ -8,8 +8,16 @@ public class Main {
 
     public static void main(String[] args) {
         CubeCorners cube = new CubeCorners();
+        System.out.println(cube.scramble(5));
+        System.out.println("____________");
+
+        long start = System.nanoTime();
 
         Tree tree = new Tree(cube);
-        System.out.println(tree);
+        tree.search();
+        tree.printToFile();
+
+        long end = System.nanoTime();
+        System.out.println((end-start)*Math.pow(10,-9) + " seconds");
     }
 }

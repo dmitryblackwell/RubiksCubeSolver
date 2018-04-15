@@ -37,7 +37,7 @@ public class Node {
 
     @Override
     public String toString() {
-        return String.valueOf(rotation) + ": \n" + cube + "\n";
+        return String.valueOf(rotation) + ": \n" + cube + (isSolved() ? "solved" : "") + "\n";
     }
 
     int getHeight(int height){

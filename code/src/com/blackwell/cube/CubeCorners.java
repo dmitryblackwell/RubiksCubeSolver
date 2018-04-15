@@ -1,6 +1,7 @@
 package com.blackwell.cube;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class CubeCorners {
     enum Color {
@@ -34,6 +35,40 @@ public class CubeCorners {
             this.v1 = v1;
             this.v2 = v2;
         }
+    }
+
+    public String scramble(int moves){
+        StringBuilder builder = new StringBuilder();
+        Random R = new Random();
+        for(int i=0; i<moves; ++i){
+            switch (R.nextInt(6)){
+                case 0:
+                    up(); up(); up();
+                    builder.append("U");
+                    break;
+                case 1:
+                    face(); face(); face();
+                    builder.append("F");
+                    break;
+                case 2:
+                    right(); right(); right();
+                    builder.append("R");
+                    break;
+                case 3:
+                    down(); down(); down();
+                    builder.append("D");
+                    break;
+                case 4:
+                    left(); left(); left();
+                    builder.append("L");
+                    break;
+                case 5:
+                    back(); back(); back();
+                    builder.append("B");
+                    break;
+            }
+        }
+        return builder.reverse().toString();
     }
 
     private void rotate(int s, Line a, Line b, Line c, Line d){
