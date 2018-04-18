@@ -3,7 +3,7 @@
 # Awesome things are coming...
 
 ```java
-public class Main {
+public class com.blackwell.corners.Main {
 
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
