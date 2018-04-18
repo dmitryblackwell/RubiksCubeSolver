@@ -7,9 +7,7 @@ import org.junit.Test;
 
 import java.io.*;
 
-import static org.junit.Assert.*;
-
-public class TreeTest {
+public class TreeCornerTest {
 
     @Before
     public void setUp() throws Exception {
@@ -34,8 +32,8 @@ public class TreeTest {
     public boolean isSearchCorrect() {
         CubeCorners cube = new CubeCorners();
         String expected = cube.scramble(5);
-        Tree tree = new Tree(cube);
-        tree.search();
+        TreeCorner treeCorner = new TreeCorner(cube);
+        treeCorner.search();
 
         try (BufferedReader in = new BufferedReader(new FileReader("data/result.txt"))) {
             boolean found = false;

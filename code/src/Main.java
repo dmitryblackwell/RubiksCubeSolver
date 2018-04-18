@@ -1,23 +1,28 @@
 import com.blackwell.cube.CubeCorners;
-import com.blackwell.search.Node;
-import com.blackwell.search.Tree;
-
-import java.util.Random;
+import com.blackwell.search.TreeCorner;
 
 public class Main {
 
     public static void main(String[] args) {
         CubeCorners cube = new CubeCorners();
-        System.out.println(cube.scramble(5));
+        String answer = cube.scramble(5);
+
+        System.out.print("Scramble: ");
+        for(int i=answer.length()-1; i>=0; --i)
+            System.out.print(answer.charAt(i) +"` ");
+
+        System.out.println("Answer: " + answer);
         System.out.println("____________");
 
         long start = System.nanoTime();
 
-        Tree tree = new Tree(cube);
-        tree.search();
-        tree.printToFile();
+        TreeCorner treeCorner = new TreeCorner(cube);
 
-        long end = System.nanoTime();
-        System.out.println((end-start)*Math.pow(10,-9) + " seconds");
+        System.out.println( (System.nanoTime() - start)*Math.pow(10,-9) + " seconds");
+
+        treeCorner.search();
+        treeCorner.printToFile();
+
+        System.out.println( (System.nanoTime()-start)*Math.pow(10,-9) + " seconds");
     }
 }
