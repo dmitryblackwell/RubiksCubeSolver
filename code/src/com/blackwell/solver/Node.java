@@ -1,0 +1,33 @@
+package com.blackwell.solver;
+
+public class Node {
+    private byte rotation;
+    private Cube cube;
+    private Node[] nodes = new Node[Cube.SIDES];
+
+    public Node(Cube c, byte r){
+        System.out.print("+");
+        rotation = r;
+        cube = c;
+    }
+
+    public void setSons(){
+        for(byte i=0; i<Cube.SIDES; ++i){
+            Cube tmp = new Cube(cube);
+            tmp.rotate(Side.values()[i]);
+            nodes[i] = new Node(tmp, i);
+        }
+    }
+
+    public byte getRotation() {
+        return rotation;
+    }
+
+    public Node getSon(int i){
+        return nodes[i];
+    }
+
+    public String getCube(){
+        return cube.toDbString();
+    }
+}

@@ -35,7 +35,7 @@ public class TreeCornerTest {
         TreeCorner treeCorner = new TreeCorner(cube);
         treeCorner.search();
 
-        try (BufferedReader in = new BufferedReader(new FileReader("data/result.txt"))) {
+        try (BufferedReader in = new BufferedReader(new FileReader("solver/result.txt"))) {
             boolean found = false;
             String line;
             while ( (line = in.readLine()) != null) {

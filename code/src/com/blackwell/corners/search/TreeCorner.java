@@ -12,8 +12,8 @@ import java.util.Set;
 
 public class TreeCorner {
     private static final int DEEP_MAX = 19;
-    private static final String TREE_DATA_FILE = "data/corners/TreeCorners.txt";
-    private static final String RESULT_FILE = "data/corners/ResultCorners.txt";
+    private static final String TREE_DATA_FILE = "solver/corners/TreeCorners.txt";
+    private static final String RESULT_FILE = "solver/corners/ResultCorners.txt";
 
     NodeCorner root;
     public TreeCorner(CubeCorners c){
