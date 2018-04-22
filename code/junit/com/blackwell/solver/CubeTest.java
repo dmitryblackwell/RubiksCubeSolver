@@ -10,7 +10,7 @@ public class CubeTest {
         Cube c = new Cube();
         String expected = c.toString();
 
-        String solution = c.scramble(1000);
+        String solution = c.scramble(10_000_000);
         c.solve(solution);
 
         String actual = c.toString();

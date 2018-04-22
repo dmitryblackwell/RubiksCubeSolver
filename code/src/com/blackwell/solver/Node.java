@@ -6,10 +6,10 @@ public class Node {
     private Node[] nodes = new Node[Cube.SIDES];
 
     public Node(Cube c, byte r){
-        System.out.print("+");
         rotation = r;
         cube = c;
     }
+
 
     public void setSons(){
         for(byte i=0; i<Cube.SIDES; ++i){
@@ -26,6 +26,8 @@ public class Node {
     public Node getSon(int i){
         return nodes[i];
     }
+
+    public void setSon(int i, Node n) { nodes[i] = n; }
 
     public String getCube(){
         return cube.toDbString();
