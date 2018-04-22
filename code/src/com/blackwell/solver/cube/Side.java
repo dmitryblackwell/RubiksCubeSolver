@@ -1,4 +1,4 @@
-package com.blackwell.solver;
+package com.blackwell.solver.cube;
 
 public enum Side {
     U(0), F(1), R(2), D(3), L(4), B(5);

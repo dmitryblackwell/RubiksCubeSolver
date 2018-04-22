@@ -1,4 +1,4 @@
-package com.blackwell.solver;
+package com.blackwell.solver.cube;
 
 public enum Sticker {
     W(0), G(1), R(2), Y(3), O(4), B(5);

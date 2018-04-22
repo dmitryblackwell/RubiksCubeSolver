@@ -1,8 +1,7 @@
 package com.blackwell.solver;
 
+import com.blackwell.solver.CubeTree.Tree;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class TreeTest {
 

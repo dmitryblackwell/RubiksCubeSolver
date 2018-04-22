@@ -1,5 +1,6 @@
 package com.blackwell.solver;
 
+import com.blackwell.solver.cube.Cube;
 import org.junit.Assert;
 import org.junit.Test;
 

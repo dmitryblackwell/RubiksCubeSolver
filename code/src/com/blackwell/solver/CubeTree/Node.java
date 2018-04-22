@@ -1,4 +1,7 @@
-package com.blackwell.solver;
+package com.blackwell.solver.CubeTree;
+
+import com.blackwell.solver.cube.Cube;
+import com.blackwell.solver.cube.Side;
 
 public class Node {
     private byte rotation;

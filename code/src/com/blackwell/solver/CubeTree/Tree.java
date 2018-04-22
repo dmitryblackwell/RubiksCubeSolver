@@ -1,4 +1,7 @@
-package com.blackwell.solver;
+package com.blackwell.solver.CubeTree;
+
+import com.blackwell.solver.cube.Cube;
+import com.blackwell.solver.cube.Side;
 
 import java.io.*;
 
@@ -29,3 +32,5 @@ public class Tree {
             run(n.getSon(i), result*10+Side.values()[i].toByte(), depth+1);
     }
 }
+
+// create tree with rotations and then go on it, rotate cube and save it

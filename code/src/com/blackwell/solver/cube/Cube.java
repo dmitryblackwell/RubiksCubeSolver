@@ -1,4 +1,4 @@
-package com.blackwell.solver;
+package com.blackwell.solver.cube;
 
 import java.util.Random;
 
