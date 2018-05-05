@@ -1,5 +1,7 @@
 package com.blackwell.solver.cube;
 
+import com.blackwell.solver.CubeTree.Rotation;
+
 import java.util.Random;
 
 public class Cube {
@@ -52,6 +54,15 @@ public class Cube {
         return sb.toString();
     }
 
+    public boolean isSolved(){
+        for(byte i=0; i<SIDES; ++i){
+            for(byte j=0; j<STICKERS; ++j){
+                if (cube[i][j] != i)
+                    return false;
+            }
+        }
+        return true;
+    }
 
     public String scramble(int max){
         StringBuilder sb = new StringBuilder();
@@ -80,6 +91,11 @@ public class Cube {
             case R: rotateRight(); break;
             case U: rotateUp(); break;
         }
+    }
+
+    public void rotate(Rotation rotation) {
+        for(int i=0; i<=rotation.getPowerOfTheMoveInt(); ++i)
+            rotate(rotation.getSide());
     }
 
 
