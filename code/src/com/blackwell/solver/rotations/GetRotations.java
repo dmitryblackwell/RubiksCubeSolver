@@ -15,7 +15,6 @@ public class GetRotations {
     private static final String EOL = System.lineSeparator();
 
     private BufferedWriter out;
-
     public GetRotations() {
         try {
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/solver/rotations.txt")));
