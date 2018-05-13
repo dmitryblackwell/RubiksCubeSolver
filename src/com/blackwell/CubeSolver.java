@@ -11,8 +11,8 @@ class CubeSolver {
 
     private static final String DATA_PATH = "data/";
     private static final String CORNERS_FILE = DATA_PATH + "corners.txt";
-    private static final String EDGE_ONE_FILE = DATA_PATH + "edge1.txt";
-    private static final String EDGE_TWO_FILE = DATA_PATH + "edge2.txt";
+    private static final String EDGE_ONE_FILE = DATA_PATH + "edges1.txt";
+    private static final String EDGE_TWO_FILE = DATA_PATH + "edges2.txt";
 
     private static final String ALREADY_SOLVED = "This cube is already solved!";
 
@@ -26,33 +26,74 @@ class CubeSolver {
         int depthLimit = DEFAULT_DEPTH_LIMIT;
         int userSelection;
         do {
-            System.out.println("Enter your choice: ");
+            System.out.print("Enter your choice: ");
             userSelection = in.nextInt();
-            switch (userSelection) {
+            switch (userSelection) {  // NO break in 0,1,2:
                 case 0:
-                    System.out.println("Generating heuristic value for corners.");
-                    iterativeDeepening(new EncodeCorner(), MAX_CORNER_PERMUTATIONS, CORNERS_FILE, depthLimit);
-                    break;
+                    Thread cornerThread = new Thread(() ->
+                            iterativeDeepening(new EncodeCorner(), MAX_CORNER_PERMUTATIONS, CORNERS_FILE, depthLimit));
+                    cornerThread.start();
+
+                    Thread edgeOneThread = new Thread(() ->
+                            iterativeDeepening(new EncodeEdge(CubieGroup.EDGE_ONE), MAX_EDGE_PERMUTATIONS, EDGE_ONE_FILE, depthLimit));
+                    edgeOneThread.start();
+
+                    Thread edgeTwoThread = new Thread(() ->
+                        iterativeDeepening(new EncodeEdge(CubieGroup.EDGE_TWO), MAX_EDGE_PERMUTATIONS, EDGE_TWO_FILE, depthLimit));
+                    edgeTwoThread.start();
+
+                    try {
+                        cornerThread.join();
+                        edgeOneThread.join();
+                        edgeTwoThread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 case 1:
-                    System.out.println("Generating heuristic value for edges, group one.");
-                    iterativeDeepening(new EncodeEdge(CubieGroup.EDGE_ONE), MAX_EDGE_PERMUTATIONS, EDGE_ONE_FILE, depthLimit);
-                    break;
-                case 2:
-                    System.out.println("Generating heuristic value for edges, group two.");
-                    iterativeDeepening(new EncodeEdge(CubieGroup.EDGE_TWO), MAX_EDGE_PERMUTATIONS, EDGE_TWO_FILE, depthLimit);
-                    break;
-                case 3:
                     RubiksCube startState = new RubiksCube();
 
-                    startState = startState.performRotation(Rotation.COUNTER_CLOCKWISE, Face.BOTTOM);
-
+                    StringBuilder answer = new StringBuilder();
+                    Random R = new Random();
+                    for(int i=0; i<5; ++i){
+                        Rotation rotationRand = Rotation.values()[ R.nextInt(Rotation.values().length) ];
+                        Face faceRand = Face.values()[ R.nextInt(Face.values().length) ];
+                        answer.append(faceToSymbol(faceRand)).append(rotationToSymbol(rotationRand)).append(" ");
+                        startState = startState.performRotation(rotationRand, faceRand);
+                    }
+                    System.out.println("Scramble: "+answer);
+                    RubiksCube cube = new RubiksCube(startState.state);
+                    //System.out.println("Searching for solution.");
+                    long start = System.nanoTime();
                     String solution = findOptimalSolution(startState);
-                    System.out.println(solution);
+                    System.out.println("Solution: " + solution);
+                    System.out.printf("%.2f secs%n", ((System.nanoTime()-start) * Math.pow(10,-9)) );
+
+                    // TODO make it with regex
+                    String[] moves = solution.split(" ");
+                    for(String move : moves){
+                        move += " ";
+                        Face face;
+                        Rotation rotation;
+
+                        face = symbolToFace(move.charAt(0));
+                        rotation = symbolToRotation(move.charAt(1));
+                        cube = cube.performRotation(rotation, face);
+                    }
+                    System.out.println((cube.isSolved() ? ANSI_GREEN : ANSI_RED) + cube.isSolved() + ANSI_RESET);
                     break;
             }
         } while (userSelection != 4);
+        in.close();
     }
-
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
 
     //////////////////////////////////////////////////////////////////////////
     // Solver
@@ -64,7 +105,7 @@ class CubeSolver {
 
         if(!isLoaded){
             cornerHeuristics = loadHeuristicValue(CORNERS_FILE, MAX_CORNER_PERMUTATIONS);
-            edgeOneHeuristics = loadHeuristicValue(EDGE_TWO_FILE, MAX_EDGE_PERMUTATIONS);
+            edgeOneHeuristics = loadHeuristicValue(EDGE_ONE_FILE, MAX_EDGE_PERMUTATIONS);
             edgeTwoHeuristics = loadHeuristicValue(EDGE_TWO_FILE, MAX_EDGE_PERMUTATIONS);
             isLoaded = true;
         }
@@ -121,7 +162,6 @@ class CubeSolver {
                 heuristic = maxHeuristic(dummyCube);
                 successors.add( new CubeNode(root, dummyCube, rotation, face, heuristic, 0));
             }
-
         return successors;
     }
 
@@ -189,19 +229,69 @@ class CubeSolver {
     // Utils
     //////////////////////////////////////////////////////////////////////////
 
-    private static String buildSolutionString(CubeNode solutionNode) {
+    private String rotationToSymbol(Rotation rotation){
+        switch (rotation){
+            default:
+            case CLOCKWISE: return  "";
+            case COUNTER_CLOCKWISE: return  "`";
+            case HALF_TURN: return  "2";
+        }
+    }
+    private String faceToSymbol(Face face){
+        switch (face){
+            default:
+            case FRONT: return "F";
+            case TOP: return "U";
+            case LEFT: return "L";
+            case RIGHT: return "R";
+            case BOTTOM: return "D";
+            case REAR: return "B";
+        }
+    }
+    private Rotation symbolToRotation(char symbol){
+        switch (symbol){
+            default:
+            case ' ': return Rotation.CLOCKWISE;
+            case '`': return Rotation.COUNTER_CLOCKWISE;
+            case '2': return Rotation.HALF_TURN;
+        }
+    }
+    private Face symbolToFace(char symbol){
+        switch (symbol){
+            default:
+            case 'F': return Face.FRONT;
+            case 'U': return Face.TOP;
+            case 'L': return Face.LEFT;
+            case 'R': return Face.RIGHT;
+            case 'D': return Face.BOTTOM;
+            case 'B': return Face.REAR;
+        }
+    }
+
+    private  String buildSolutionString(CubeNode solutionNode) {
 
         Deque<String> moveStack = new ArrayDeque<>();
 
         while (solutionNode.parent != null){
-            moveStack.push(solutionNode.face.toString() + ":"+solutionNode.rotation.toString());
+            String rotation = rotationToSymbol(solutionNode.rotation);
+            String face = faceToSymbol(solutionNode.face);
+
+            if ((solutionNode.face == solutionNode.parent.face) &&
+                    (   (solutionNode.rotation == Rotation.CLOCKWISE && solutionNode.parent.rotation == Rotation.COUNTER_CLOCKWISE) ||
+                        (solutionNode.rotation == Rotation.COUNTER_CLOCKWISE && solutionNode.parent.rotation == Rotation.CLOCKWISE) ||
+                        (solutionNode.rotation == Rotation.HALF_TURN && solutionNode.parent.rotation == Rotation.HALF_TURN))) {
+                    solutionNode = solutionNode.parent.parent;
+                    continue;
+            }
+
+            moveStack.push(face + rotation);
             solutionNode = solutionNode.parent;
         }
 
         StringBuilder sb = new StringBuilder();
-        while (!moveStack.isEmpty())
-            sb.append(moveStack.pop()).append("|");
-
+        while (!moveStack.isEmpty()) {
+            sb.append(moveStack.pop()).append(" ");
+        }
         return sb.toString();
     }
 
@@ -222,3 +312,6 @@ class CubeSolver {
 // Emphatic - This Time
 // Flowing River - Dying in Paradise
 // The Halo Method - The Last Astronaut
+// What Comes To Life = Falling For A Kiss
+// Lit - Miss You Gone
+// Miracle Of Sound - Take It Back

@@ -1,6 +1,11 @@
 package com.blackwell;
 
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 public class RubiksCube implements EncodeConsts{
 
     byte[] state;
@@ -10,6 +15,33 @@ public class RubiksCube implements EncodeConsts{
     }
     public RubiksCube(byte[] state){
         this.state = Arrays.copyOf(state,state.length);
+    }
+
+    public static String scramble(RubiksCube cube, int rotations){
+        Random R = new Random();
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<rotations; ++i){
+            int rotation = R.nextInt(3);
+            int face = R.nextInt(6);
+            cube = cube.performRotation(Rotation.values()[rotation], Face.values()[face]);
+            sb.append("[").append(Rotation.values()[rotation].toString()).append(":").append(Face.values()[face]).append("] ");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+
+        if ( !(other instanceof RubiksCube)) return false;
+
+        RubiksCube c = (RubiksCube)other;
+
+        for (int i=0; i < state.length; ++i)
+            if (this.state[i] != c.state[i])
+                return false;
+
+        return true;
     }
 
     public RubiksCube performRotation(Rotation rotation, Face face) {
@@ -26,9 +58,9 @@ public class RubiksCube implements EncodeConsts{
 
     private RubiksCube rotateCW (Face face) { return rotate(face, Rotation.CLOCKWISE); }
     private RubiksCube rotateCCW (Face face) { return rotate(face, Rotation.COUNTER_CLOCKWISE); }
-    private RubiksCube rotateHT (Face face) { return rotate(face, Rotation.HALF_TURN); }
+    private RubiksCube rotateHT (Face face) { return rotate(face, Rotation.CLOCKWISE).rotate(face, Rotation.CLOCKWISE); }
 
-    public RubiksCube rotate(Face face, Rotation rotation){
+    private RubiksCube rotate(Face face, Rotation rotation){
         int offset = 0;
         if (face == Face.LEFT || face == Face.RIGHT)
             offset = 1;
@@ -154,22 +186,22 @@ public class RubiksCube implements EncodeConsts{
     }
 
     public boolean isSolved(){
-        for(byte i=0; i<EncodeStrategy.CORNER_LENGTH; ++i)
+        for(byte i=0; i<CORNER_LENGTH; ++i)
             if (state[i] != (byte) (i*3))
                 return false;
 
-        for(byte i=EncodeStrategy.CORNER_LENGTH; i<state.length; ++i)
-            if (state[i] != (byte) ((i-EncodeStrategy.CORNER_LENGTH)*2))
+        for(byte i=CORNER_LENGTH; i<state.length; ++i)
+            if (state[i] != (byte) ((i-CORNER_LENGTH)*2))
                 return false;
 
         return true;
     }
     private void setToSolvedState(){
-        for(byte i=0; i<EncodeStrategy.CORNER_LENGTH; ++i)
+        for(byte i=0; i<CORNER_LENGTH; ++i)
             state[i] = (byte) (i*3);
 
-        for(byte i=EncodeStrategy.CORNER_LENGTH; i<state.length; ++i)
-            state[i] = (byte) ((i-EncodeStrategy.CORNER_LENGTH)*2);
+        for(byte i=CORNER_LENGTH; i<state.length; ++i)
+            state[i] = (byte) ((i-CORNER_LENGTH)*2);
     }
 
     @Override
@@ -191,4 +223,5 @@ public class RubiksCube implements EncodeConsts{
     private static EncodeStrategy cornerEncoder = new EncodeCorner();
     private static EncodeStrategy edgeOneEncoder = new EncodeEdge(CubieGroup.EDGE_ONE);
     private static EncodeStrategy edgeTwoEncoder = new EncodeEdge(CubieGroup.EDGE_TWO);
+
 }

@@ -26,10 +26,11 @@ public class EncodeEdge implements EncodeStrategy {
             int position = aCube.state[i] / EDGE_DIVISOR;
 
             encoding += EDGE_WEIGHTS[k] * (aCube.state[i] - shiftFactors[position]);
-            for(int j= position+1; j<shiftFactors.length; ++j)
+            for(int j = (position+1); j<shiftFactors.length; ++j)
                 shiftFactors[j] += EDGE_DIVISOR;
         }
 
         return encoding;
     }
+
 }

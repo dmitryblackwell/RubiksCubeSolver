@@ -1,12 +1,13 @@
 package com.blackwell;
 
-public class CubeNode {
+class CubeNode {
+
     CubeNode parent;
     RubiksCube state;
     Rotation rotation;
     Face face;
-    int heuristic = 0;
-    int permId = -1;
+    int heuristic;
+    int permId;
 
     public CubeNode(CubeNode parent, RubiksCube state, Rotation rotation, Face face, int heuristic, int permId) {
         this.parent = parent;
