@@ -2,4 +2,6 @@
 
 # Awesome things are coming...
 
-![cube](https://raw.githubusercontent.com/dmitryblackwell/EpamPractice/master/img/cube.jpg)
+<p align="center">
+<img src="https://raw.githubusercontent.com/dmitryblackwell/RubiksCubeSolver/master/img/cube.jpg)" />
+</p>
