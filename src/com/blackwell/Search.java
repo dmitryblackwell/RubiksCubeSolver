@@ -73,7 +73,7 @@ public class Search {
 		int mv, n = 0;
 		boolean busy = false;
 		int depthPhase1 = 1;
-		// +++++++++++++++++++ Main loop ++++++++++++++++++++++++++++++++++++++++++
+		// +++++++++++++++++++ com.blackwell.Main loop ++++++++++++++++++++++++++++++++++++++++++
 		do {
 			do {
 				if ((depthPhase1 - n > minDistPhase1[n + 1]) && !busy) {

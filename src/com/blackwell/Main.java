@@ -1,8 +1,10 @@
-import com.blackwell.Search;
+package com.blackwell;
+
 import com.blackwell.utils.Tools;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //A simple GUI example to demonstrate how to use the package org.kociemba.twophase
@@ -26,8 +28,17 @@ public class Main extends JFrame {
 
 	private final Color[] COLORS = { Color.white, Color.red, Color.green, Color.yellow, Color.orange, Color.blue };
 	private JButton buttonRandom; // scramble button
-	private JButton Solve;
+	private JButton solve;
 	private Color curCol = COLORS[0];
+
+	private static final int WIDTH = 556;
+	private static final int HEIGHT = 491;
+
+	private JButton nextBtn;
+	private JButton privBtn;
+	private JLabel resultText;
+	private String[] rotations;
+	private int index;
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	public static void main(String[] args) {
@@ -42,64 +53,106 @@ public class Main extends JFrame {
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	public Main() { initGUI(); }
 
+	private static void setStyle(JButton btn, int fontSize){
+        btn.setBackground(new Color(59, 89, 182));
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Tahoma", Font.BOLD, fontSize));
+    }
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	private void initGUI() {
-
+		ImageIcon icon = new ImageIcon("res/rubik.png");
+		setIconImage(icon.getImage());
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		getContentPane().setBackground(Color.decode("#F0F8FF"));
 		this.setTitle("Rubik's Cube Solver");
 
 		// ++++++++++++++++++++++++++++++++++ Set up Solve Cube Button ++++++++++++++++++++++++++++++++++++++++++++++++++++
-		Solve = new JButton("Solve Cube");
-		getContentPane().add(Solve);
-		Solve.setBounds(422, 64, 114, 48);
-		Solve.addActionListener(evt -> solveCube());
+		solve = new JButton("Solve");
+		getContentPane().add(solve);
+		solve.setBounds(422, 64, 114, 48);
+		setStyle(solve, 20);
+		solve.addActionListener(evt -> solveCube());
 
 		// ++++++++++++++++++++++++++++++++++ Set up Scramble Button ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		{
 			buttonRandom = new JButton("Scramble");
 			getContentPane().add(buttonRandom);
 			buttonRandom.setBounds(422, 17, 114, 22);
+			setStyle(buttonRandom, 15);
 			buttonRandom.addActionListener(evt -> {
                 String r = Tools.randomCube();
-                for (int i = 0; i < 6; i++)
-                    for (int j = 0; j < 9; j++) {
-                        switch (r.charAt(9 * i + j)) {
-                        case 'U':
-                            facelet[i][j].setBackground(COLORS[0]);
-                            break;
-                        case 'R':
-                            facelet[i][j].setBackground(COLORS[1]);
-                            break;
-                        case 'F':
-                            facelet[i][j].setBackground(COLORS[2]);
-                            break;
-                        case 'D':
-                            facelet[i][j].setBackground(COLORS[3]);
-                            break;
-                        case 'L':
-                            facelet[i][j].setBackground(COLORS[4]);
-                            break;
-                        case 'B':
-                            facelet[i][j].setBackground(COLORS[5]);
-                            break;
-                        }
-                    }
+                setFacelets(r);
             });
 		}
 
+		// next and priv buttons
+        nextBtn = new JButton(">");
+		nextBtn.setBounds(WIDTH/2+200,HEIGHT-80,40,40);
+		setStyle(nextBtn, 7);
+		nextBtn.addActionListener(e -> {
+			FaceCube cube = new FaceCube();// get cube from facelet buttons
+			CubieCube cubie = cube.toCubieCube();
+
+			setFacelets(cubie.toFaceCube().to_String());
+
+        });
+        getContentPane().add(nextBtn);
+
+        resultText = new JLabel("Enter data");
+        resultText.setBounds(WIDTH/2 - 200,HEIGHT-80,400,40);
+        resultText.setHorizontalAlignment(SwingConstants.CENTER);
+        getContentPane().add(resultText);
+
+		privBtn = new JButton("<");
+		privBtn.setBounds(WIDTH/2-50-200,HEIGHT-80,40,40);
+		setStyle(privBtn,7);
+		getContentPane().add(privBtn);
+
+
 		setUpButtons();
 		pack();
-		this.setSize(556, 441);
+		this.setSize(WIDTH, HEIGHT);
 
 	}
+
+
+	private void setFacelets(String r){
+		for (int i = 0; i < 6; i++)
+			for (int j = 0; j < 9; j++) {
+				switch (r.charAt(9 * i + j)) {
+					case 'U':
+						facelet[i][j].setBackground(COLORS[0]);
+						break;
+					case 'R':
+						facelet[i][j].setBackground(COLORS[1]);
+						break;
+					case 'F':
+						facelet[i][j].setBackground(COLORS[2]);
+						break;
+					case 'D':
+						facelet[i][j].setBackground(COLORS[3]);
+						break;
+					case 'L':
+						facelet[i][j].setBackground(COLORS[4]);
+						break;
+					case 'B':
+						facelet[i][j].setBackground(COLORS[5]);
+						break;
+				}
+			}
+	}
+
+
     private void setUpButtons(){
         // ++++++++++++++++++++++++++++++++++ Set up editable facelets ++++++++++++++++++++++++++++++++++++++++++++++++++++
         for (int i = 0; i < 6; i++)
             for (int j = 0; j < 9; j++) {
                 facelet[i][j] = new JButton();
                 getContentPane().add(facelet[i][j]);
-                facelet[i][j].setBackground(Color.gray);
+                //facelet[i][j].setBackground(Color.decode("#F0F8FF"));
+                facelet[i][j].setBackground(new Color(0,0,0,0));
                 facelet[i][j].setRolloverEnabled(false);
                 facelet[i][j].setOpaque(true);
                 facelet[i][j].setBounds(FSIZE * XOFF[i] + FSIZE * (j % 3), FSIZE * YOFF[i] + FSIZE * (j / 3), FSIZE, FSIZE);
@@ -124,17 +177,14 @@ public class Main extends JFrame {
 
         }
     }
-	// ++++++++++++++++++++++++++++++++++++ End initGUI +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// +++++++++++++++++++++++++++++++ Generate cube from GUI-Input and solve it ++++++++++++++++++++++++++++++++++++++++
-	private void solveCube() {
+    private String getCubeInput(){
 		StringBuilder sb = new StringBuilder(54);
 
 		for (int i = 0; i < 54; i++)
 			sb.insert(i, 'B');// default initialization
 
 		for (int i = 0; i < 6; i++)
-			// read the 54 facelets
 			for (int j = 0; j < 9; j++) {
 				if (facelet[i][j].getBackground() == facelet[0][4].getBackground())
 					sb.setCharAt(9 * i + j, 'U');
@@ -150,15 +200,26 @@ public class Main extends JFrame {
 					sb.setCharAt(9 * i + j, 'B');
 			}
 
-		String cubeString = sb.toString();
+		return sb.toString();
+
+	}
+	// ++++++++++++++++++++++++++++++++++++ End initGUI +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	// +++++++++++++++++++++++++++++++ Generate cube from GUI-Input and solve it ++++++++++++++++++++++++++++++++++++++++
+	private void solveCube() {
+		resultText.setText("Loading...");
+		String cubeString = getCubeInput();
 		System.out.println(cubeString);
 
 		// ++++++++++++++++++++++++ Call Search.solution method from package org.kociemba.twophase ++++++++++++++++++++++++
 		String result = Search.solution(cubeString);
+        resultText.setText(result);
 
+        rotations = result.split(" ");
+		System.out.println(Arrays.toString(rotations));
 		// +++++++++++++++++++ Replace the error messages with more meaningful ones in your language ++++++++++++++++++++++
 
-		JOptionPane.showMessageDialog(null, result);
+		//JOptionPane.showMessageDialog(null, result);
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	}
 }

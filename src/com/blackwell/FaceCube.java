@@ -50,7 +50,7 @@ public class FaceCube {
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Construct a facelet cube from a string
-	FaceCube(String cubeString) {
+	public FaceCube(String cubeString) {
 		for (int i = 0; i < cubeString.length(); i++)
 			f[i] = Color.valueOf(cubeString.substring(i, i + 1));
 	}
