@@ -2,3 +2,4 @@
 .data/
 .data/heuristic/
 .out/production/RubiksCubeSolver/solver/
+.out/

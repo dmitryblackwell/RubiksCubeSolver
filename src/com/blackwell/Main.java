@@ -1,5 +1,6 @@
 package com.blackwell;
 
+import com.blackwell.utils.JCube;
 import com.blackwell.utils.Tools;
 
 import javax.swing.*;
@@ -92,10 +93,24 @@ public class Main extends JFrame {
 		nextBtn.setBounds(WIDTH/2+200,HEIGHT-80,40,40);
 		setStyle(nextBtn, 7);
 		nextBtn.addActionListener(e -> {
-			FaceCube cube = new FaceCube();// get cube from facelet buttons
-			CubieCube cubie = cube.toCubieCube();
+		    FaceCube fc = new FaceCube();
+		    CubieCube c = new CubieCube();
+		    String in = fc.to_String(); // getCubeInput();
 
-			setFacelets(cubie.toFaceCube().to_String());
+		    for(int i=0; i<JCube.SIDES; ++i) {
+		        char ch = (char) JCube.Side.values()[i].ordinal();
+                in = in.replace(ch, sideToColor(ch));
+            }
+			JCube cube = new JCube(in);
+
+            System.out.println("Input " + in);
+            System.out.println("Old cube " + cube);
+			System.out.println("Make rotation " + rotations[index]);
+
+			cube.rotate(rotations[index++]);
+            System.out.println("New cube: " + cube);
+
+			setFacelets(cube.toString());
 
         });
         getContentPane().add(nextBtn);
@@ -114,9 +129,35 @@ public class Main extends JFrame {
 		setUpButtons();
 		pack();
 		this.setSize(WIDTH, HEIGHT);
-
 	}
 
+	private char sideToColor(char side){
+
+        if (side == colorToChar(facelet[0][4].getBackground()))
+            return 'U';
+        if (side == colorToChar(facelet[1][4].getBackground()))
+            return 'R';
+        if (side == colorToChar(facelet[2][4].getBackground()))
+            return 'F';
+        if (side == colorToChar(facelet[3][4].getBackground()))
+            return 'D';
+        if (side == colorToChar(facelet[4][4].getBackground()))
+            return 'L';
+        if (side == colorToChar(facelet[5][4].getBackground()))
+            return 'B';
+
+        return ' ';
+    }
+
+	private char colorToChar(Color c){
+	    if (c.equals(Color.white)) return 'W';
+	    if (c.equals(Color.red)) return 'R';
+	    if (c.equals(Color.green)) return 'G';
+	    if (c.equals(Color.yellow)) return 'Y';
+	    if (c.equals(Color.orange)) return 'O';
+	    if (c.equals(Color.blue)) return 'B';
+	    return ' ';
+    }
 
 	private void setFacelets(String r){
 		for (int i = 0; i < 6; i++)
