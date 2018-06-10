@@ -1,5 +1,2 @@
 .idea/
-.data/
-.data/heuristic/
-.out/production/RubiksCubeSolver/solver/
-.out/
+out/

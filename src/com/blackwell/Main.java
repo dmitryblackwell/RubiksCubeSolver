@@ -1,5 +1,6 @@
 package com.blackwell;
 
+import com.blackwell.utils.Cube;
 import com.blackwell.utils.JCube;
 import com.blackwell.utils.Tools;
 
@@ -60,6 +61,9 @@ public class Main extends JFrame {
         btn.setFocusPainted(false);
         btn.setFont(new Font("Tahoma", Font.BOLD, fontSize));
     }
+
+
+
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	private void initGUI() {
 		ImageIcon icon = new ImageIcon("res/rubik.png");
@@ -67,14 +71,35 @@ public class Main extends JFrame {
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		getContentPane().setBackground(Color.decode("#F0F8FF"));
+		//getContentPane().setBackground(Color.decode("#0288D1"));
 		this.setTitle("Rubik's Cube Solver");
 
 		// ++++++++++++++++++++++++++++++++++ Set up Solve Cube Button ++++++++++++++++++++++++++++++++++++++++++++++++++++
 		solve = new JButton("Solve");
 		getContentPane().add(solve);
-		solve.setBounds(422, 64, 114, 48);
+		solve.setBounds(422, 70, 114, 35);
 		setStyle(solve, 20);
 		solve.addActionListener(evt -> solveCube());
+
+		JButton enterBtn = new JButton("Enter");
+		getContentPane().add(enterBtn);
+		enterBtn.setBounds(422,40,114,22);
+		setStyle(enterBtn, 15);
+		enterBtn.addActionListener(evt ->{
+		    String input = JOptionPane.showInputDialog(null, "Enter rotations");
+		    if("".equals(input)) {
+		        FaceCube fc = new FaceCube();
+		        CubieCube cb = fc.toCubieCube();
+                setFacelets(fc.to_String());
+                return;
+            }
+            String[] rot = input.split(" ");
+		    Cube c = new Cube(getCubeInput());
+		    for(String r : rot)
+		        c.rotate(r);
+		    setFacelets(c.toString());
+
+        });
 
 		// ++++++++++++++++++++++++++++++++++ Set up Scramble Button ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		{
@@ -93,25 +118,12 @@ public class Main extends JFrame {
 		nextBtn.setBounds(WIDTH/2+200,HEIGHT-80,40,40);
 		setStyle(nextBtn, 7);
 		nextBtn.addActionListener(e -> {
-		    FaceCube fc = new FaceCube();
-		    CubieCube c = new CubieCube();
-		    String in = fc.to_String(); // getCubeInput();
-
-		    for(int i=0; i<JCube.SIDES; ++i) {
-		        char ch = (char) JCube.Side.values()[i].ordinal();
-                in = in.replace(ch, sideToColor(ch));
-            }
-			JCube cube = new JCube(in);
-
-            System.out.println("Input " + in);
-            System.out.println("Old cube " + cube);
-			System.out.println("Make rotation " + rotations[index]);
-
-			cube.rotate(rotations[index++]);
-            System.out.println("New cube: " + cube);
-
-			setFacelets(cube.toString());
-
+		    Cube c = new Cube(getCubeInput());
+            if (rotations != null && index < rotations.length)
+                c.rotate(rotations[index++]);
+            //String rot = JOptionPane.showInputDialog(null, "Enter rotation: ");
+		    //c.rotate(rot);
+			setFacelets(c.toString());
         });
         getContentPane().add(nextBtn);
 
@@ -122,6 +134,13 @@ public class Main extends JFrame {
 
 		privBtn = new JButton("<");
 		privBtn.setBounds(WIDTH/2-50-200,HEIGHT-80,40,40);
+        privBtn.addActionListener(e -> {
+            Cube c = new Cube(getCubeInput());
+            if (rotations != null && index > 0)
+                c.alternative(rotations[--index]);
+            setFacelets(c.toString());
+        });
+
 		setStyle(privBtn,7);
 		getContentPane().add(privBtn);
 
@@ -257,6 +276,7 @@ public class Main extends JFrame {
         resultText.setText(result);
 
         rotations = result.split(" ");
+        index = 0;
 		System.out.println(Arrays.toString(rotations));
 		// +++++++++++++++++++ Replace the error messages with more meaningful ones in your language ++++++++++++++++++++++
 
