@@ -8,7 +8,7 @@ public class CoordCube {
 	public static final short N_FLIP = 2048;// 2^11 possible edge flips
 	static final short N_SLICE1 = 495;// 12 choose 4 possible positions of FR,FL,BL,BR edges
 	static final short N_SLICE2 = 24;// 4! permutations of FR,FL,BL,BR edges in phase2
-	static final short N_PARITY = 2; // 2 possible corner parities
+	private static final short N_PARITY = 2; // 2 possible corner parities
 	static final short N_URFtoDLF = 20160;// 8!/(8-6)! permutation of URF,UFL,ULB,UBR,DFR,DLF corners
 	static final short N_FRtoBR = 11880; // 12!/(12-4)! permutation of FR,FL,BL,BR edges
 	static final short N_URtoUL = 1320; // 12!/(12-3)! permutation of UR,UF,UL edges
@@ -339,6 +339,8 @@ public class CoordCube {
 			depth++;
 		}
 	}
+
+
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Pruning table for the flip of the edges and the position (not permutation) of the UD-slice edges in phase1

@@ -10,53 +10,62 @@ import static com.blackwell.utils.Corner.*;
 import static com.blackwell.utils.Edge.*;
 import static com.blackwell.utils.Facelet.*;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Cube on the facelet level
+/**
+ * Cube on the facelet level
+ */
 public class FaceCube {
-	public Color[] f = new Color[54];
+	Color[] f = new Color[54];
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Map the corner positions to facelet positions. cornerFacelet[URF.ordinal()][0] e.g. gives the position of the
-	// facelet in the URF corner position, which defines the orientation.<br>
-	// cornerFacelet[URF.ordinal()][1] and cornerFacelet[URF.ordinal()][2] give the position of the other two facelets
-	// of the URF corner (clockwise).
+	/**
+     *  Map the corner positions to facelet positions. cornerFacelet[URF.ordinal()][0] e.g. gives the position of the
+	 * facelet in the URF corner position, which defines the orientation.
+     * cornerFacelet[URF.ordinal()][1] and cornerFacelet[URF.ordinal()][2] give the position of the other two facelets
+     * of the URF corner (clockwise).
+     */
 	final static Facelet[][] cornerFacelet = { { U9, R1, F3 }, { U7, F1, L3 }, { U1, L1, B3 }, { U3, B1, R3 },
 			{ D3, F9, R7 }, { D1, L9, F7 }, { D7, B9, L7 }, { D9, R9, B7 } };
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Map the edge positions to facelet positions. edgeFacelet[UR.ordinal()][0] e.g. gives the position of the facelet in
-	// the UR edge position, which defines the orientation.<br>
-	// edgeFacelet[UR.ordinal()][1] gives the position of the other facelet
+
+    /**
+     *  Map the edge positions to facelet positions. edgeFacelet[UR.ordinal()][0] e.g. gives the position of the facelet in
+     * the UR edge position, which defines the orientation.<br>
+     * edgeFacelet[UR.ordinal()][1] gives the position of the other facelet
+     **/
 	final static Facelet[][] edgeFacelet = { { U6, R2 }, { U8, F2 }, { U4, L2 }, { U2, B2 }, { D6, R8 }, { D2, F8 },
 			{ D4, L8 }, { D8, B8 }, { F6, R4 }, { F4, L6 }, { B6, L4 }, { B4, R6 } };
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Map the corner positions to facelet colors.
+    /**
+     * Map the corner positions to facelet colors.
+     */
 	final static Color[][] cornerColor = { { U, R, F }, { U, F, L }, { U, L, B }, { U, B, R }, { D, F, R }, { D, L, F },
 			{ D, B, L }, { D, R, B } };
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Map the edge positions to facelet colors.
+    /**
+     * Map the edge positions to facelet colors.
+     */
 	final static Color[][] edgeColor = { { U, R }, { U, F }, { U, L }, { U, B }, { D, R }, { D, F }, { D, L }, { D, B },
 			{ F, R }, { F, L }, { B, L }, { B, R } };
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 	FaceCube() {
 		String s = "UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB";
 		for (int i = 0; i < 54; i++)
 			f[i] = Color.valueOf(s.substring(i, i + 1));
-
 	}
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Construct a facelet cube from a string
-	public FaceCube(String cubeString) {
+    /**
+     *  Construct a facelet cube from a string
+     * @param cubeString Rubik's cube in string representation
+     */
+	FaceCube(String cubeString) {
 		for (int i = 0; i < cubeString.length(); i++)
 			f[i] = Color.valueOf(cubeString.substring(i, i + 1));
 	}
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Gives string representation of a facelet cube
+    /**
+     * Gives string representation of a facelet cube
+     * @return cube in string representation
+     */
 	public String to_String() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 54; i++)
@@ -64,8 +73,10 @@ public class FaceCube {
 		return sb.toString();
 	}
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Gives CubieCube representation of a faceletcube
+
+    /**
+     * Gives CubieCube representation of a faceletcube
+     */
 	CubieCube toCubieCube() {
 		byte ori;
 		CubieCube ccRet = new CubieCube();

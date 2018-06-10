@@ -1,37 +1,24 @@
 package com.blackwell;
 
 import com.blackwell.utils.Cube;
-import com.blackwell.utils.JCube;
 import com.blackwell.utils.Tools;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//A simple GUI example to demonstrate how to use the package org.kociemba.twophase
 
-/**
- * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI Builder, which is free for non-commercial
- * use. If Jigloo is being used commercially (ie, by a corporation, company or business for any purpose whatever) then
- * you should purchase a license for each developer using Jigloo. Please visit www.cloudgarden.com for details. Use of
- * Jigloo implies acceptance of these licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR THIS MACHINE, SO
- * JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
- */
 public class Main extends JFrame {
 
-	// +++++++++++++These variables used only in the GUI-interface+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// These variables used only in the GUI-interface
 	private JButton[][] facelet = new JButton[6][9];
 	private final JButton[] colorSel = new JButton[6];
 
-	private final int FSIZE = 45; // size of buttons
-	private final int[] XOFF = { 3, 6, 3, 3, 0, 9 }; // start position of each button group
+    private final int[] XOFF = { 3, 6, 3, 3, 0, 9 }; // start position of each button group
 	private final int[] YOFF = { 0, 3, 3, 6, 3, 3 };
 
 	private final Color[] COLORS = { Color.white, Color.red, Color.green, Color.yellow, Color.orange, Color.blue };
-	private JButton buttonRandom; // scramble button
-	private JButton solve;
-	private Color curCol = COLORS[0];
+    private Color curCol = COLORS[0];
 
 	private static final int WIDTH = 556;
 	private static final int HEIGHT = 491;
@@ -66,54 +53,57 @@ public class Main extends JFrame {
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	private void initGUI() {
+
 		ImageIcon icon = new ImageIcon("res/rubik.png");
 		setIconImage(icon.getImage());
 		getContentPane().setLayout(null);
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		getContentPane().setBackground(Color.decode("#F0F8FF"));
-		//getContentPane().setBackground(Color.decode("#0288D1"));
 		this.setTitle("Rubik's Cube Solver");
 
-		// ++++++++++++++++++++++++++++++++++ Set up Solve Cube Button ++++++++++++++++++++++++++++++++++++++++++++++++++++
-		solve = new JButton("Solve");
-		getContentPane().add(solve);
-		solve.setBounds(422, 70, 114, 35);
-		setStyle(solve, 20);
-		solve.addActionListener(evt -> solveCube());
+		// Set up Solve Cube Button
 
-		JButton enterBtn = new JButton("Enter");
-		getContentPane().add(enterBtn);
-		enterBtn.setBounds(422,40,114,22);
-		setStyle(enterBtn, 15);
-		enterBtn.addActionListener(evt ->{
-		    String input = JOptionPane.showInputDialog(null, "Enter rotations");
-		    if("".equals(input)) {
-		        FaceCube fc = new FaceCube();
-		        CubieCube cb = fc.toCubieCube();
+        JButton solve = new JButton("Solve");
+        getContentPane().add(solve);
+        solve.setBounds(422, 70, 114, 35);
+        setStyle(solve, 20);
+        solve.addActionListener(evt -> solveCube());
+
+		// Button to enter moves
+
+        JButton enterBtn = new JButton("Enter");
+        getContentPane().add(enterBtn);
+        enterBtn.setBounds(422, 40, 114, 22);
+        setStyle(enterBtn, 15);
+        enterBtn.addActionListener(evt -> {
+            String input = JOptionPane.showInputDialog(null, "Enter rotations");
+            if ("".equals(input)) {
+                FaceCube fc = new FaceCube();
+                CubieCube cb = fc.toCubieCube();
                 setFacelets(fc.to_String());
                 return;
             }
             String[] rot = input.split(" ");
-		    Cube c = new Cube(getCubeInput());
-		    for(String r : rot)
-		        c.rotate(r);
-		    setFacelets(c.toString());
+            Cube c = new Cube(getCubeInput());
+            for (String r : rot)
+                c.rotate(r);
+            setFacelets(c.toString());
 
         });
 
-		// ++++++++++++++++++++++++++++++++++ Set up Scramble Button ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		{
-			buttonRandom = new JButton("Scramble");
-			getContentPane().add(buttonRandom);
-			buttonRandom.setBounds(422, 17, 114, 22);
-			setStyle(buttonRandom, 15);
-			buttonRandom.addActionListener(evt -> {
-                String r = Tools.randomCube();
-                setFacelets(r);
-            });
-		}
+		// Set up Scramble Button
 
-		// next and priv buttons
+        JButton buttonRandom = new JButton("Scramble");
+        getContentPane().add(buttonRandom);
+        buttonRandom.setBounds(422, 17, 114, 22);
+        setStyle(buttonRandom, 15);
+        buttonRandom.addActionListener(evt -> {
+            String r = Tools.randomCube();
+            setFacelets(r);
+        });
+
+
+		// next move button
         nextBtn = new JButton(">");
 		nextBtn.setBounds(WIDTH/2+200,HEIGHT-80,40,40);
 		setStyle(nextBtn, 7);
@@ -127,13 +117,17 @@ public class Main extends JFrame {
         });
         getContentPane().add(nextBtn);
 
+        // Label with solution
         resultText = new JLabel("Enter data");
         resultText.setBounds(WIDTH/2 - 200,HEIGHT-80,400,40);
         resultText.setHorizontalAlignment(SwingConstants.CENTER);
         getContentPane().add(resultText);
 
+        // priv move button
 		privBtn = new JButton("<");
 		privBtn.setBounds(WIDTH/2-50-200,HEIGHT-80,40,40);
+        setStyle(privBtn,7);
+        getContentPane().add(privBtn);
         privBtn.addActionListener(e -> {
             Cube c = new Cube(getCubeInput());
             if (rotations != null && index > 0)
@@ -141,42 +135,10 @@ public class Main extends JFrame {
             setFacelets(c.toString());
         });
 
-		setStyle(privBtn,7);
-		getContentPane().add(privBtn);
-
-
 		setUpButtons();
 		pack();
 		this.setSize(WIDTH, HEIGHT);
 	}
-
-	private char sideToColor(char side){
-
-        if (side == colorToChar(facelet[0][4].getBackground()))
-            return 'U';
-        if (side == colorToChar(facelet[1][4].getBackground()))
-            return 'R';
-        if (side == colorToChar(facelet[2][4].getBackground()))
-            return 'F';
-        if (side == colorToChar(facelet[3][4].getBackground()))
-            return 'D';
-        if (side == colorToChar(facelet[4][4].getBackground()))
-            return 'L';
-        if (side == colorToChar(facelet[5][4].getBackground()))
-            return 'B';
-
-        return ' ';
-    }
-
-	private char colorToChar(Color c){
-	    if (c.equals(Color.white)) return 'W';
-	    if (c.equals(Color.red)) return 'R';
-	    if (c.equals(Color.green)) return 'G';
-	    if (c.equals(Color.yellow)) return 'Y';
-	    if (c.equals(Color.orange)) return 'O';
-	    if (c.equals(Color.blue)) return 'B';
-	    return ' ';
-    }
 
 	private void setFacelets(String r){
 		for (int i = 0; i < 6; i++)
@@ -204,9 +166,10 @@ public class Main extends JFrame {
 			}
 	}
 
-
+    // Set up editable facelets
     private void setUpButtons(){
-        // ++++++++++++++++++++++++++++++++++ Set up editable facelets ++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // size of buttons
+        final int FSIZE = 45;
         for (int i = 0; i < 6; i++)
             for (int j = 0; j < 9; j++) {
                 facelet[i][j] = new JButton();

@@ -6,7 +6,7 @@ package com.blackwell;
 /**
  * Class Search implements the Two-Phase-Algorithm.
  */
-public class Search {
+class Search {
 
 	private static int[] ax = new int[31]; // The axis of the move
 	private static int[] po = new int[31]; // The power of the move
@@ -66,7 +66,7 @@ public class Search {
         UBtoDF[0] = cube.UBtoDF;
     }
 
-	public static String solution(String facelets) {
+	static String solution(String facelets) {
 	    axisInit(facelets);
 
 		minDistPhase1[1] = 1;// else failure for depth=1, n=0
