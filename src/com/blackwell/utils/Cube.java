@@ -134,7 +134,7 @@ public class Cube {
             cube[s[3][0]][s[3][i]] = tmp[i-1];
     }
 
-    public void rotateLeft(){
+    private void rotateLeft(){
         rotate(L,
                 new byte[][] {  {U, 0,3,6},
                         {B, 8,5,2},
@@ -148,7 +148,8 @@ public class Cube {
         // D036 <- F036
         // F036 <- tmp
     }
-    public void rotateRight(){
+
+    private void rotateRight(){
         rotate( R,
                 new byte[][] {  {U, 2,5,8},
                         {F, 2,5,8},

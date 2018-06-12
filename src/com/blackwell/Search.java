@@ -133,8 +133,8 @@ class Search {
 		} while (true);
 	}
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Apply phase2 of algorithm and return the combined phase1 and phase2 depth. In phase2, only the moves
+	// Apply phase2 of algorithm and return the combined
+	// phase1 and phase2 depth. In phase2, only the moves
 	// U,D,R2,F2,L2 and B2 are allowed.
 	private static int totalDepth(int depthPhase1) {
 		int mv, d1, d2;

@@ -114,6 +114,7 @@ public class Main extends JFrame {
             //String rot = JOptionPane.showInputDialog(null, "Enter rotation: ");
 		    //c.rotate(rot);
 			setFacelets(c.toString());
+			updateRotations();
         });
         getContentPane().add(nextBtn);
 
@@ -133,12 +134,28 @@ public class Main extends JFrame {
             if (rotations != null && index > 0)
                 c.alternative(rotations[--index]);
             setFacelets(c.toString());
+            updateRotations();
         });
 
 		setUpButtons();
 		pack();
 		this.setSize(WIDTH, HEIGHT);
 	}
+
+	private void updateRotations(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("<html>");
+		for(int i=0; i<rotations.length; ++i){
+			if(i == index)
+				sb.append("<font color=\'red\'>").append(rotations[i]).append("</font>");
+			else
+				sb.append(rotations[i]);
+			sb.append(" ");
+		}
+		sb.append("</html>");
+		resultText.setText(sb.toString());
+	}
+
 
 	private void setFacelets(String r){
 		for (int i = 0; i < 6; i++)
@@ -226,27 +243,42 @@ public class Main extends JFrame {
 		return sb.toString();
 
 	}
-	// ++++++++++++++++++++++++++++++++++++ End initGUI +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// +++++++++++++++++++++++++++++++ Generate cube from GUI-Input and solve it ++++++++++++++++++++++++++++++++++++++++
 	private void solveCube() {
+
 		resultText.setText("Loading...");
 		String cubeString = getCubeInput();
 		System.out.println(cubeString);
 
-		// ++++++++++++++++++++++++ Call Search.solution method from package org.kociemba.twophase ++++++++++++++++++++++++
 		String result = Search.solution(cubeString);
         resultText.setText(result);
 
         rotations = result.split(" ");
         index = 0;
 		System.out.println(Arrays.toString(rotations));
-		// +++++++++++++++++++ Replace the error messages with more meaningful ones in your language ++++++++++++++++++++++
 
-		//JOptionPane.showMessageDialog(null, result);
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	}
 }
 
 
 // What comes to life - falling for a kiss
+
+
+// cпециальность
+// строки 1.5
+// 2 строки между змистом и текстом
+// в змисти перелок джерел посилання
+//
+// первий требования
+
+// рисунки переделать
+// строчки между
+// енмив - перечислення
+//птоим
+
+// висновок переделать с навичками
+// добавить пояснения R L D@
+// инструкция ссылки на рисунки
+// перелик джерел посилань\
+// електронние пресурси
+//ДОДАТОК с новой страницы
