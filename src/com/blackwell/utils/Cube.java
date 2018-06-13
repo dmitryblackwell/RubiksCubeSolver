@@ -1,18 +1,12 @@
 package com.blackwell.utils;
 
 public class Cube {
-    public static final byte SIDES = 6;
+    private static final byte SIDES = 6;
     private static final byte STICKERS = 9;
+    private static final String SOLVED_STATE = "UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB";
 
-    private enum Side {
-        U(0), F(1), R(2), D(3), L(4), B(5);
-        private byte n;
-
-        public byte toByte() { return n; }
-        Side(int n){ this.n = (byte) n; }
-    }
-
-    char[][] cube = new char[SIDES][STICKERS];
+    private enum Side { U, F, R, D, L, B }
+    private char[][] cube = new char[SIDES][STICKERS];
 
     public Cube(String c){
         for(int i=0; i<SIDES; ++i)
@@ -28,6 +22,13 @@ public class Cube {
         return sb.toString();
     }
 
+    /**
+     * Find and make alternative rotation.
+     * For example: alternative rotation for R' is R,
+     * for D is D'
+     * for F2 is F2
+     * @param rotation axis and power of the move
+     */
     public void alternative(String rotation){
         switch (rotation){
             case "U'": rotate("U"); break;
@@ -54,8 +55,12 @@ public class Cube {
         }
     }
 
+    public boolean isSolved(){
+        return SOLVED_STATE.equals(toString());
+    }
+
     public void rotate(String rotation){
-        System.out.println("Rotating: " + rotation);
+        //System.out.println("Rotating: " + rotation);
         switch (rotation){
             case "U'": rotate(Side.U);
             case "U2": rotate(Side.U);
@@ -86,7 +91,7 @@ public class Cube {
 
 
 
-    public void rotate(Side s){
+    private void rotate(Side s){
         switch (s){
             case B: rotateBack(); break;
             case D: rotateDown(); break;
@@ -165,7 +170,7 @@ public class Cube {
     }
 
 
-    public void rotateUp(){
+    private void rotateUp(){
         rotate( U,
                 new byte[][] {  {F, 0,1,2},
                         {R, 0,1,2},
@@ -180,7 +185,7 @@ public class Cube {
         // L012 <- tmp
     }
 
-    public void rotateDown(){
+    private void rotateDown(){
         rotate( D,
                 new byte[][] {  {F, 6,7,8},
                         {L, 6,7,8},
@@ -195,7 +200,7 @@ public class Cube {
         // R678 <- tmp
     }
 
-    public void rotateFace() {
+    private void rotateFace() {
         rotate( F,
                 new byte[][] {  {U, 6,7,8},
                         {L, 2,5,8},
@@ -217,7 +222,7 @@ public class Cube {
         cube[U][8] = cube[U][6];
         cube[U][6] = tmp;
     }
-    public void rotateBack(){
+    private void rotateBack(){
         rotate( B,
                 new byte[][] {  {U, 0,1,2},
                         {R, 2,5,8},

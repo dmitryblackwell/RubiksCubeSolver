@@ -23,8 +23,6 @@ public class Main extends JFrame {
 	private static final int WIDTH = 556;
 	private static final int HEIGHT = 491;
 
-	private JButton nextBtn;
-	private JButton privBtn;
 	private JLabel resultText;
 	private String[] rotations;
 	private int index;
@@ -40,7 +38,10 @@ public class Main extends JFrame {
 	}
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	public Main() { initGUI(); }
+	private Main() {
+		initGUI();
+		new Thread(() -> Search.solution(Tools.randomCube())).start();
+	}
 
 	private static void setStyle(JButton btn, int fontSize){
         btn.setBackground(new Color(59, 89, 182));
@@ -79,7 +80,6 @@ public class Main extends JFrame {
             String input = JOptionPane.showInputDialog(null, "Enter rotations");
             if ("".equals(input)) {
                 FaceCube fc = new FaceCube();
-                CubieCube cb = fc.toCubieCube();
                 setFacelets(fc.to_String());
                 return;
             }
@@ -104,7 +104,7 @@ public class Main extends JFrame {
 
 
 		// next move button
-        nextBtn = new JButton(">");
+		JButton nextBtn = new JButton(">");
 		nextBtn.setBounds(WIDTH/2+200,HEIGHT-80,40,40);
 		setStyle(nextBtn, 7);
 		nextBtn.addActionListener(e -> {
@@ -125,7 +125,7 @@ public class Main extends JFrame {
         getContentPane().add(resultText);
 
         // priv move button
-		privBtn = new JButton("<");
+		JButton privBtn = new JButton("<");
 		privBtn.setBounds(WIDTH/2-50-200,HEIGHT-80,40,40);
         setStyle(privBtn,7);
         getContentPane().add(privBtn);

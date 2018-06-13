@@ -66,7 +66,7 @@ class Search {
         UBtoDF[0] = cube.UBtoDF;
     }
 
-	static String solution(String facelets) {
+	static synchronized String solution(String facelets) {
 	    axisInit(facelets);
 
 		minDistPhase1[1] = 1;// else failure for depth=1, n=0
@@ -136,7 +136,7 @@ class Search {
 	// Apply phase2 of algorithm and return the combined
 	// phase1 and phase2 depth. In phase2, only the moves
 	// U,D,R2,F2,L2 and B2 are allowed.
-	private static int totalDepth(int depthPhase1) {
+	private synchronized static int totalDepth(int depthPhase1) {
 		int mv, d1, d2;
 		int maxDepthPhase2 = 10; // Allow only max 10 moves in phase2
 		for (int i = 0; i < depthPhase1; i++) {

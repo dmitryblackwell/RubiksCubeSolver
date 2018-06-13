@@ -7,7 +7,6 @@ import com.blackwell.CubieCube;
 import com.blackwell.FaceCube;
 
 public class Tools {
-
 	/**
 	 * Generates a random cube.
 	 * @return A random cube in the string representation. Each cube of the cube space has the same probability.
