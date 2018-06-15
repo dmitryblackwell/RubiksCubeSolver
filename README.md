@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-   *Implementation of Kociemba algorithm for solving Rubik's cube.*
+   <i>Implementation of Kociemba algorithm for solving Rubik's cube.</i>
 </p>
 
 
@@ -89,14 +89,14 @@ It restores the permutation of the 8 corners, the permutation of the 8 edges of 
  
 The algorithm does not stop when a first solution is found but continues to search for shorter solutions by carrying out phase 2 from suboptimal solutions of phase 1. 
 
-> [origin](http://kociemba.org/cube.htm)
+> [Herbert Kociemba](http://kociemba.org/cube.htm)
 
 ## Running the tests
 
 In `junit` folder you can find simple test for Search algorithm. It is randomly scramble cube and then solve it.
 Only if cube in it is final state, test is complete successfully.
 
-## Code Example
+## Search algorithm using
 
 Simple example of how searching algorithm is called and where.
 
@@ -122,9 +122,9 @@ public class Main extends JFrame {
 ```
 
 ## Versioning
-We use [SemVer](http://semver.org/) for versioning. 
-
 Current version is **1.0.1**
+
+For details see [SemVer](http://semver.org/) site.
 
 ## Author
 * **Dmitry Blackwell** - *Initial work, Algorithm, GUI.* - [@dmitryblackwell](https://github.com/dmitryblackwell)
@@ -132,5 +132,6 @@ Current version is **1.0.1**
 
 ## License
 This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details.
+
 Apache License 2.0 © [@dmitryblackwell](https://github.com/dmitryblackwell)
 
