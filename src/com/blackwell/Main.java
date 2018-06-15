@@ -55,7 +55,7 @@ public class Main extends JFrame {
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	private void initGUI() {
 
-		ImageIcon icon = new ImageIcon("res/rubik.png");
+		ImageIcon icon = new ImageIcon(getClass().getResource("/res/rubik.png"));
 		setIconImage(icon.getImage());
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -262,23 +262,3 @@ public class Main extends JFrame {
 
 
 // What comes to life - falling for a kiss
-
-
-// cпециальность
-// строки 1.5
-// 2 строки между змистом и текстом
-// в змисти перелок джерел посилання
-//
-// первий требования
-
-// рисунки переделать
-// строчки между
-// енмив - перечислення
-//птоим
-
-// висновок переделать с навичками
-// добавить пояснения R L D@
-// инструкция ссылки на рисунки
-// перелик джерел посилань\
-// електронние пресурси
-//ДОДАТОК с новой страницы
